@@ -1,6 +1,16 @@
+# SpringBoot 项目初始模板
+
+基于 Java SpringBoot 的项目初始模板，整合了常用框架和主流业务的示例代码。
+
+只需 1 分钟即可完成内容网站的后端！！！大家还可以在此基础上快速开发自己的项目。
+
+[toc]
+
+## 模板特点
+
 ### 主流框架 & 特性
 
-- Spring Boot 2.7.x（贼新）
+- Spring Boot 2.7.x
 - Spring MVC
 - MyBatis + MyBatis Plus 数据访问（开启分页）
 - Spring Boot 调试工具和项目处理器
@@ -61,7 +71,7 @@
 
 ## 快速上手
 
-> 所有需要修改的地方都标记了 `todo`，
+> 所有需要修改的地方鱼皮都标记了 `todo`
 
 ### MySQL 数据库
 
@@ -78,7 +88,7 @@ spring:
 
 2）执行 `sql/create_table.sql` 中的数据库语句，自动创建库表
 
-3）启动项目，访问 `http://localhost:8101/api/doc.html` 即可打开接口文档
+3）启动项目，访问 `http://localhost:8101/api/doc.html` 即可打开接口文档，不需要写前端就能在线调试接口了~
 
 ![](doc/swagger.png)
 
@@ -139,6 +149,8 @@ PUT post_v1
  参数见 sql/post_es_mapping.json 文件
 }
 ```
+
+这步不会操作的话需要补充下 Elasticsearch 的知识，或者自行百度一下~
 
 3）开启同步任务，将数据库的帖子同步到 Elasticsearch
 
