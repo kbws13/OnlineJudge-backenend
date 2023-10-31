@@ -6,10 +6,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import xyz.kbws.common.ErrorCode;
 import xyz.kbws.constant.CommonConstant;
 import xyz.kbws.exception.BusinessException;
+import xyz.kbws.judge.JudgeService;
 import xyz.kbws.mapper.QuestionSubmitMapper;
 import xyz.kbws.model.dto.question.QuestionQueryRequest;
 import xyz.kbws.model.dto.questionsubmit.QuestionSubmitAddRequest;
@@ -32,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -44,10 +47,14 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         implements QuestionSubmitService {
 
     @Resource
-    QuestionService questionService;
+    private QuestionService questionService;
 
     @Resource
-    UserService userService;
+    private UserService userService;
+
+    @Resource
+    @Lazy
+    private JudgeService judgeService;
 
     /**
      * 提交题目
@@ -73,23 +80,29 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         // 是否已提交题目
         long userId = loginUser.getId();
         // 每个用户串行提交题目
-        QuestionSubmit questionSubmit1 = new QuestionSubmit();
-        questionSubmit1.setUserId(userId);
-        questionSubmit1.setQuestionId(questionId);
-        questionSubmit1.setCode(questionSubmitAddRequest.getCode());
-        questionSubmit1.setLanguage(language);
+        QuestionSubmit questionSubmit = new QuestionSubmit();
+        questionSubmit.setUserId(userId);
+        questionSubmit.setQuestionId(questionId);
+        questionSubmit.setCode(questionSubmitAddRequest.getCode());
+        questionSubmit.setLanguage(language);
         // 设置初始状态
-        questionSubmit1.setStatus(QuestionSubmitStatusEnum.WAITING.getValue());
-        questionSubmit1.setJudgeInfo("{}");
-        boolean save = this.save(questionSubmit1);
-        if (!save) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据插入异常");
+        questionSubmit.setStatus(QuestionSubmitStatusEnum.WAITING.getValue());
+        questionSubmit.setJudgeInfo("{}");
+        boolean save = this.save(questionSubmit);
+        if (!save){
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据插入失败");
         }
-        return questionSubmit1.getId();
+        Long questionSubmitId = questionSubmit.getId();
+        // 执行判题服务
+        CompletableFuture.runAsync(() -> {
+            judgeService.doJudge(questionSubmitId);
+        });
+        return questionSubmitId;
     }
 
+
     /**
-     * 获取查询包装类（用户可能根据哪些字段查询，根据前端传来的请求对象，得到 mybatis 支持的查询 QueryWrapper 类）
+     * 获取查询包装类（用户根据哪些字段查询，根据前端传来的请求对象，得到 mybatis 框架支持的查询 QueryWrapper 类）
      *
      * @param questionSubmitQueryRequest
      * @return
@@ -100,13 +113,14 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         if (questionSubmitQueryRequest == null) {
             return queryWrapper;
         }
-        Long questionId = questionSubmitQueryRequest.getQuestionId();
-        Integer status = questionSubmitQueryRequest.getStatus();
         String language = questionSubmitQueryRequest.getLanguage();
-        String userId = questionSubmitQueryRequest.getUserId();
+        Integer status = questionSubmitQueryRequest.getStatus();
+        Long questionId = questionSubmitQueryRequest.getQuestionId();
+        Long userId = questionSubmitQueryRequest.getUserId();
         String sortField = questionSubmitQueryRequest.getSortField();
         String sortOrder = questionSubmitQueryRequest.getSortOrder();
 
+        // 拼接查询条件
         queryWrapper.eq(StringUtils.isNotBlank(language), "language", language);
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(questionId), "questionId", questionId);
@@ -120,12 +134,12 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
     @Override
     public QuestionSubmitVO getQuestionSubmitVO(QuestionSubmit questionSubmit, User loginUser) {
         QuestionSubmitVO questionSubmitVO = QuestionSubmitVO.objToVo(questionSubmit);
-        long id = loginUser.getId();
+        // 脱敏：仅本人和管理员能看见自己（提交 userId 和登录用户 id 不同）提交的代码
+        long userId = loginUser.getId();
         // 处理脱敏
-        if (id != questionSubmit.getUserId() && !userService.isAdmin(loginUser)) {
+        if (userId != questionSubmit.getUserId() && !userService.isAdmin(loginUser)) {
             questionSubmitVO.setCode(null);
         }
-
         return questionSubmitVO;
     }
 
@@ -137,8 +151,8 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
             return questionSubmitVOPage;
         }
         List<QuestionSubmitVO> questionSubmitVOList = questionSubmitList.stream()
-                        .map(questionSubmit -> getQuestionSubmitVO(questionSubmit, loginUser))
-                                .collect(Collectors.toList());
+                .map(questionSubmit -> getQuestionSubmitVO(questionSubmit, loginUser))
+                .collect(Collectors.toList());
         questionSubmitVOPage.setRecords(questionSubmitVOList);
         return questionSubmitVOPage;
     }

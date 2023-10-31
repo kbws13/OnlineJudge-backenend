@@ -11,16 +11,20 @@ import xyz.kbws.judge.codesandbox.model.ExecuteCodeResponse;
  * @description:
  */
 @Slf4j
-@AllArgsConstructor
-public class CodeSandBoxProxy implements CodeSandBox{
+public class CodeSandBoxProxy implements CodeSandBox {
 
-    private final CodeSandBox codeSandBox;
+    private final CodeSandBox codeSandbox;
+
+
+    public CodeSandBoxProxy(CodeSandBox codeSandbox) {
+        this.codeSandbox = codeSandbox;
+    }
 
     @Override
     public ExecuteCodeResponse executeCode(ExecuteCodeRequest executeCodeRequest) {
-        log.info("代码沙箱请求信息:" + executeCodeRequest.toString());
-        ExecuteCodeResponse executeCodeResponse = codeSandBox.executeCode(executeCodeRequest);
-        log.info("代码沙箱响应信息:" + executeCodeResponse.toString());
+        log.info("代码沙箱请求信息：" + executeCodeRequest.toString());
+        ExecuteCodeResponse executeCodeResponse = codeSandbox.executeCode(executeCodeRequest);
+        log.info("代码沙箱响应信息：" + executeCodeResponse.toString());
         return executeCodeResponse;
     }
 }

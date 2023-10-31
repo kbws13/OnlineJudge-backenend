@@ -42,7 +42,7 @@ public class QuestionSubmitController {
      *
      * @param questionSubmitAddRequest
      * @param request
-     * @return resultNum 本次点赞变化数
+     * @return BaseResponse
      */
     @PostMapping("/")
     public BaseResponse<Long> doQuestionSubmit(@RequestBody QuestionSubmitAddRequest questionSubmitAddRequest,

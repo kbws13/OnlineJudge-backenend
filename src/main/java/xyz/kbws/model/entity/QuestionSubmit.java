@@ -20,16 +20,6 @@ public class QuestionSubmit implements Serializable {
     private Long id;
 
     /**
-     * 题目 id
-     */
-    private Long questionId;
-
-    /**
-     * 提交用户 id
-     */
-    private Long userId;
-
-    /**
      * 编程语言
      */
     private String language;
@@ -45,9 +35,19 @@ public class QuestionSubmit implements Serializable {
     private String judgeInfo;
 
     /**
-     * 判题状态(0 - 待判题，1 - 判题中，2 - 成功，3 - 失败)
+     * 判题状态（0 - 待判题、1 - 判题中、2 - 成功、3 - 失败）
      */
     private Integer status;
+
+    /**
+     * 题目 id
+     */
+    private Long questionId;
+
+    /**
+     * 创建用户 id
+     */
+    private Long userId;
 
     /**
      * 创建时间
