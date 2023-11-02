@@ -6,8 +6,7 @@ import xyz.kbws.judge.strategy.DefaultJudgeStrategy;
 import xyz.kbws.judge.strategy.JavaLanguageJudgeStrategy;
 import xyz.kbws.judge.strategy.JudgeContext;
 import xyz.kbws.judge.strategy.JudgeStrategy;
-import xyz.kbws.model.dto.questionsubmit.JudgeInfo;
-import xyz.kbws.model.entity.Question;
+import xyz.kbws.judge.codesandbox.model.JudgeInfo;
 import xyz.kbws.model.entity.QuestionSubmit;
 
 /**

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.google.gson.Gson;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
-import xyz.kbws.model.dto.questionsubmit.JudgeInfo;
+import xyz.kbws.judge.codesandbox.model.JudgeInfo;
 import xyz.kbws.model.entity.QuestionSubmit;
 
 import java.io.Serializable;

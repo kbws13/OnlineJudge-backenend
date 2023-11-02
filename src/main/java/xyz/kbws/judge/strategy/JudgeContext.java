@@ -2,7 +2,7 @@ package xyz.kbws.judge.strategy;
 
 import lombok.Data;
 import xyz.kbws.model.dto.question.JudgeCase;
-import xyz.kbws.model.dto.questionsubmit.JudgeInfo;
+import xyz.kbws.judge.codesandbox.model.JudgeInfo;
 import xyz.kbws.model.entity.Question;
 import xyz.kbws.model.entity.QuestionSubmit;
 

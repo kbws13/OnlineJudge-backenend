@@ -3,7 +3,7 @@ package xyz.kbws.judge.codesandbox.impl;
 import xyz.kbws.judge.codesandbox.CodeSandBox;
 import xyz.kbws.judge.codesandbox.model.ExecuteCodeRequest;
 import xyz.kbws.judge.codesandbox.model.ExecuteCodeResponse;
-import xyz.kbws.model.dto.questionsubmit.JudgeInfo;
+import xyz.kbws.judge.codesandbox.model.JudgeInfo;
 import xyz.kbws.model.enums.JudgeInfoMessageEnum;
 import xyz.kbws.model.enums.QuestionSubmitStatusEnum;
 

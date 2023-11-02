@@ -1,6 +1,6 @@
 package xyz.kbws.judge.strategy;
 
-import xyz.kbws.model.dto.questionsubmit.JudgeInfo;
+import xyz.kbws.judge.codesandbox.model.JudgeInfo;
 
 /**
  * @author kbws

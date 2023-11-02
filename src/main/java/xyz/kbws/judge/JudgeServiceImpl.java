@@ -11,12 +11,9 @@ import xyz.kbws.judge.codesandbox.CodeSandBoxFactory;
 import xyz.kbws.judge.codesandbox.CodeSandBoxProxy;
 import xyz.kbws.judge.codesandbox.model.ExecuteCodeRequest;
 import xyz.kbws.judge.codesandbox.model.ExecuteCodeResponse;
-import xyz.kbws.judge.strategy.DefaultJudgeStrategy;
-import xyz.kbws.judge.strategy.JavaLanguageJudgeStrategy;
 import xyz.kbws.judge.strategy.JudgeContext;
-import xyz.kbws.judge.strategy.JudgeStrategy;
 import xyz.kbws.model.dto.question.JudgeCase;
-import xyz.kbws.model.dto.questionsubmit.JudgeInfo;
+import xyz.kbws.judge.codesandbox.model.JudgeInfo;
 import xyz.kbws.model.entity.Question;
 import xyz.kbws.model.entity.QuestionSubmit;
 import xyz.kbws.model.enums.QuestionSubmitStatusEnum;
@@ -96,7 +93,6 @@ public class JudgeServiceImpl implements JudgeService {
         judgeContext.setJudgeCaseList(judgeCaseList);
         judgeContext.setQuestion(question);
         judgeContext.setQuestionSubmit(questionSubmit);
-        log.error("开始创建questionSubmitUpdate");
         JudgeInfo judgeInfo = judgeManager.doJudge(judgeContext);
 
         // 6）修改数据库中的判题结果

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import xyz.kbws.model.dto.questionsubmit.JudgeInfo;
 
 import java.util.List;
 
