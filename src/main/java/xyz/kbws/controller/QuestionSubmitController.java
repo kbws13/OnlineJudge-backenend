@@ -1,27 +1,12 @@
 package xyz.kbws.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import xyz.kbws.annotation.AuthCheck;
-import xyz.kbws.common.BaseResponse;
-import xyz.kbws.common.ErrorCode;
-import xyz.kbws.common.ResultUtils;
-import xyz.kbws.constant.UserConstant;
-import xyz.kbws.exception.BusinessException;
-import xyz.kbws.model.dto.questionsubmit.QuestionSubmitAddRequest;
-import xyz.kbws.model.dto.questionsubmit.QuestionSubmitQueryRequest;
-import xyz.kbws.model.entity.QuestionSubmit;
-import xyz.kbws.model.entity.User;
-import xyz.kbws.model.vo.QuestionSubmitVO;
 import xyz.kbws.service.QuestionSubmitService;
 import xyz.kbws.service.UserService;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 题目提交接口

@@ -306,7 +306,6 @@ public class QuestionController {
         if (questionSubmitAddRequest == null || questionSubmitAddRequest.getQuestionId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // 登录才能点赞
         final User loginUser = userService.getLoginUser(request);
         long questionSubmitId = questionSubmitService.doQuestionSubmit(questionSubmitAddRequest, loginUser);
         return ResultUtils.success(questionSubmitId);
@@ -320,7 +319,7 @@ public class QuestionController {
      * @return
      */
     @PostMapping("/question_submit/list/page")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    //@AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Page<QuestionSubmitVO>> listQuestionSubmit(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest,
                                                                    HttpServletRequest request) {
         long current = questionSubmitQueryRequest.getCurrent();
