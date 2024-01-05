@@ -16,6 +16,7 @@ import xyz.kbws.model.dto.question.JudgeCase;
 import xyz.kbws.judge.codesandbox.model.JudgeInfo;
 import xyz.kbws.model.entity.Question;
 import xyz.kbws.model.entity.QuestionSubmit;
+import xyz.kbws.model.enums.JudgeInfoMessageEnum;
 import xyz.kbws.model.enums.QuestionSubmitStatusEnum;
 import xyz.kbws.service.QuestionService;
 import xyz.kbws.service.QuestionSubmitService;
@@ -96,6 +97,10 @@ public class JudgeServiceImpl implements JudgeService {
         JudgeInfo judgeInfo = judgeManager.doJudge(judgeContext);
         log.error(judgeInfo.toString());
         // 6）修改数据库中的判题结果
+        if (judgeInfo.getMessage().equals(JudgeInfoMessageEnum.ACCEPTED.getValue())) {
+            question.setAcceptedNum(question.getAcceptedNum() + 1);
+            questionService.updateById(question);
+        }
         questionSubmitUpdate = new QuestionSubmit();
         questionSubmitUpdate.setId(questionSubmitId);
         questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.SUCCEED.getValue());
